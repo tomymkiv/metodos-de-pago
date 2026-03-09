@@ -13,6 +13,7 @@ interface Product {
 }
 
 export default function index({ products }: { products: Product[] }) {
+    const [buttonText, setButtonText] = useState('');
     const [idProduct, setIdProduct] = useState(Number);
     const { post, processing } = useForm<Product>({
         id: 0,
@@ -22,12 +23,16 @@ export default function index({ products }: { products: Product[] }) {
     });
 
     const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
-        // console.log(route('mercadopago', idProduct))
         e.preventDefault();
-        // console.log(e);
-        // identificar el boton de mercadopago sobre el resto
 
-        post(route('mercadopago', idProduct, true, Ziggy))
+        // identifico cada boton, para aplicar el método correspondiente
+        buttonText.includes('Mercado') && post(route('mercadopago', idProduct, true, Ziggy));
+        buttonText.includes('Pay') && console.log('paypal');
+        buttonText.includes('Stripe') && console.log('stripe');
+    }
+    const handleButton = (pr: number, e: HTMLButtonElement) =>{
+        setIdProduct(pr); // id del producto
+        setButtonText(e.textContent) // detecto el boton (de qué plataforma)
     }
     return (
         <MainContainer>
@@ -42,9 +47,9 @@ export default function index({ products }: { products: Product[] }) {
                                     price={pr.precio}
                                     quantity={pr.cantidad}
                                 />
-                                <button disabled={processing} onClick={() => setIdProduct(products[id].id)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con MercadoPago</button>
-                                <button disabled={processing} onClick={() => setIdProduct(products[id].id)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-400 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con PayPal</button>
-                                <button disabled={processing} onClick={() => setIdProduct(products[id].id)} type="submit" className="p-3 bg-gray-800 hover:bg-purple-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-gray-200">Pagar con Stripe</button>
+                                <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con MercadoPago</button>
+                                <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-400 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con PayPal</button>
+                                <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-purple-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-gray-200">Pagar con Stripe</button>
                             </div>
                         ))
                     }

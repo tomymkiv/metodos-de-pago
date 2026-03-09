@@ -19,7 +19,13 @@ class ProductController extends Controller
         $producto = Product::findOrFail($id);
         $mercadoPagoService = new MercadoPagoService();
         $preference = $mercadoPagoService->createPreference($producto);
-
+        
         return redirect()->away($preference->sandbox_init_point);
+    }
+    public function paypal(){
+
+    }
+    public function stripe(){
+        
     }
 }
