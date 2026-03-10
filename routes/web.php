@@ -8,6 +8,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [ProductController::class, 'index'])->name('index');
 
 // Mercadopago
-Route::post('/mercadopago/{id}', [ProductController::class, 'mercadopago'])->name('mercadopago');
+Route::get('/mercadopago/{id}', [ProductController::class, 'mercadopago'])->name('mercadopago');
 // paypal.
-Route::get('/paypal-payment/{id}', [ProductController::class, 'paypal'])->name('paypal');
+// obtengo el producto y asigno la URL en base a ese producto 
+Route::get('/paypal/{id}', [ProductController::class, 'paypal'])->name('paypal');
+// paypal, en caso de pago exitoso
+Route::get('/paypal/payment/success', function () {
+    return 'Pago exitoso';
+})->name('paypal.payment.success');
+// paypal, en caso de pago fallido o cancelado
+Route::get('/paypal/payment/cancel', function () {
+    return 'Pago cancelado';
+})->name('paypal.payment.cancel');

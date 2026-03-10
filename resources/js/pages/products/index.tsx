@@ -26,18 +26,18 @@ export default function index({ products }: { products: Product[] }) {
         e.preventDefault();
 
         // identifico cada boton, para aplicar el método correspondiente
-        buttonText.includes('Mercado') && post(route('mercadopago', idProduct, true, Ziggy));
+        // buttonText.includes('Mercado') && route('mercadopago', idProduct, true, Ziggy);
         buttonText.includes('Pay') && console.log('paypal');
         buttonText.includes('Stripe') && console.log('stripe');
     }
-    const handleButton = (pr: number, e: HTMLButtonElement) =>{
+    const handleButton = (pr: number, e: HTMLButtonElement) => {
         setIdProduct(pr); // id del producto
         setButtonText(e.textContent) // detecto el boton (de qué plataforma)
     }
     return (
         <MainContainer>
             <div className="my-50 space-y-5 w-full max-w-md md:max-w-xl lg:max-w-2xl mx-auto">
-                <h2>Productos (mercadopago)</h2>
+                <h2>Productos</h2>
                 <form onSubmit={handleSubmit} className="space-y-20">
                     {
                         products.map((pr, id) => (
@@ -47,8 +47,8 @@ export default function index({ products }: { products: Product[] }) {
                                     price={pr.precio}
                                     quantity={pr.cantidad}
                                 />
-                                <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con MercadoPago</button>
-                                <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-blue-400 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black">Pagar con PayPal</button>
+                                <a href={route('mercadopago', products[id].id, true, Ziggy)} className="p-3 bg-gray-800 hover:bg-blue-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black text-center" target='_blank'>Pagar con MercadoPago</a>
+                                <a href={route('paypal', products[id].id, true, Ziggy)} className="p-3 bg-gray-800 hover:bg-blue-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-black text-center" target='_blank'>Pagar con PayPal</a>
                                 <button disabled={processing} onClick={(e) => handleButton(products[id].id, e.currentTarget)} type="submit" className="p-3 bg-gray-800 hover:bg-purple-600 transition-colors duration-300 cursor-pointer rounded-lg hover:text-gray-200">Pagar con Stripe</button>
                             </div>
                         ))
